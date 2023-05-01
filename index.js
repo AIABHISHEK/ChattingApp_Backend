@@ -38,7 +38,6 @@ app.use(router);
 io.on('connection', (socket) => {
     console.log(socket.id);
     console.log('connected');
-    // this function run when above connected user (socket get disconnected)
     // call back can be handled on client side for specific error
     socket.on('join', (data, callback) => {
         console.log(data);
@@ -47,8 +46,8 @@ io.on('connection', (socket) => {
         if(error) return callback(error);
         //join to certain room 
         socket.join(user.room);
-        socket.emit('message', {user: user.name, message: 'Welcome to room ' + user.room })
-        socket.broadcast.to(user.name).emit('message', {user: 'admin', text: `&{user.name} has joined`});
+        socket.emit('WelcomeMessage', {user: user.name, text: 'Welcome to room ' + user.room })
+        socket.broadcast.to(user.room).emit('UserJoinMessage', {user: 'admin', text: `${user.name} has joined`});
         // io.to(user.room).emit('joined_room', {message:user.name + " has joined room" });
         callback(undefined);
         })
